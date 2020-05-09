@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="epoch" style="height:220px"></div>
+    <p><button class="playback">Play</button> </p>
+    <script>
+        $(function() {
+            var data = [
+                {label: 'Series1', values: []},
+                {label: 'Series2', values: []},
+                {label: 'Series3', values: []}
+            ]
+            interval = null;
+            length = 40;
+/*
+            for (var i=0; i<length; i++){
+                time = nextTime();
+                data[0].values.push({time: time, y:Math.random()*100});
+                data[1].values.push({time: time, y:Math.random()*100});
+                data[2].values.push({time: time, y:Math.random()*100});
+            }
+*/
+            var chart = $('.epoch').epoch({
+                type: 'time.line',
+                data: data
+            })
+
+            function pushPoint() {
+                time = nextTime();
+                chart.push([
+                    {time: time, y:Math.random()*100},
+                    {time: time, y:Math.random()*100},
+                    {time: time, y:Math.random()*100},
+                ]);
+            }
+
+            $('.playback').click(function(e) {
+                if (!interval) {
+                    interval = setInterval(function() { pushPoint() }, 1000);
+                    pushPoint();
+                    $('.playback').text('Pause');
+                }
+                else {
+                    clearInterval(interval);
+                    interval = null;
+                    $('.playback').text('Play');
+                }
+            })
+        });
+    </script>
+{% endblock %}
